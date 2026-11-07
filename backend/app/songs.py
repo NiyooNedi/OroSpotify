@@ -43,3 +43,36 @@ def get_songs():
     return songsJSON
 
 
+#when someone sends a GET request to /songs{song_id}, execute function below
+@router.get("/songs/{song_id}")
+def get_song_name(song_id: int):
+
+    #connects Python app to Postgre, calling function from database.py
+    conn = get_db_connection()
+
+    #execute SQL commands through connection and retrieve results
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT song_name
+            FROM Song
+            WHERE song_id = %s;
+        """, (song_id,))
+        #passing in song_id as a tuple into the cursor func which will be %s
+
+        #retrieves row returned by the query
+        songTuple = cursor.fetchone()
+
+        #if the query returns nothing
+        if songTuple is None:
+            raise HTTPException(status_code=404, detail="Song not found")
+
+        songsJSON = {"song_name": songTuple[0]}
+
+        return songsJSON
+
+    finally:
+        cursor.close()
+        conn.close()
+

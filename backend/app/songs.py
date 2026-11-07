@@ -118,16 +118,18 @@ def get_songs_with_artists():
 
     try:
         cursor.execute("""
-            SELECT S.song_id, S.song_name, S.storage_path, S.duration, A.artist_name
-            FROM Artist A JOIN Song_Artist SA ON A.artist_id = SA.artist_id
-            JOIN Song S ON S.song_id = SA.song_id
-            ORDER BY A.artist_id;
+            SELECT S.song_id, S.song_name, S.storage_path, S.duration, 
+            STRING_AGG(A.artist_name, ', ') AS artist_names
+            FROM Song S
+            JOIN Song_Artist SA ON S.song_id = SA.song_id JOIN Artist A ON SA.artist_id = A.artist_id
+            GROUP BY S.song_id, S.song_name, S.storage_path, S.duration
+            ORDER BY S.song_id;
         """)
 
         #set songsTuples equal to the array with the rows cursor returns of the match 
         songsTuples = cursor.fetchall()
 
-        if songsTuples is None:
+        if not songsTuples:
             raise HTTPException(status_code=404, detail="Songs not found")
         
         #convert the results from tuples to JSON object

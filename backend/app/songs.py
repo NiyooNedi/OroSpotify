@@ -107,3 +107,44 @@ def play_song(song_id: int):
     finally:
         cursor.close()
         conn.close()
+
+#function that returns all of the songs with it's artists
+@router.get("/songs_with_artists")
+def get_songs_with_artists():
+
+    #connect to the db and create a cursor to iterate
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT S.song_id, S.song_name, S.storage_path, S.duration, A.artist_name
+            FROM Artist A JOIN Song_Artist SA ON A.artist_id = SA.artist_id
+            JOIN Song S ON S.song_id = SA.song_id
+            ORDER BY A.artist_id;
+        """)
+
+        #set songsTuples equal to the array with the rows cursor returns of the match 
+        songsTuples = cursor.fetchall()
+
+        if songsTuples is None:
+            raise HTTPException(status_code=404, detail="Songs not found")
+        
+        #convert the results from tuples to JSON object
+        songsJSON = []
+        for row in songsTuples:
+            songsJSON.append(
+                {
+                "song_id": row[0], 
+                "song_name": row[1], 
+                "storage_path": row[2], 
+                "duration": row[3],
+                "artist_name": row[4]
+                }
+            )
+        
+        return songsJSON
+
+    finally:
+        cursor.close()
+        conn.close()

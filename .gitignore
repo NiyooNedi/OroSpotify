@@ -16,3 +16,9 @@ venv/
 
 # Mac system files
 .DS_Store
+
+
+*.pyc
+
+
+

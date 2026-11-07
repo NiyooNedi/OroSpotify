@@ -76,3 +76,34 @@ def get_song_name(song_id: int):
         cursor.close()
         conn.close()
 
+
+@router.get("/songs/{song_id}/play")
+def play_song(song_id: int):
+
+    #connect to the db and create a cursor to iterate
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT storage_path
+            FROM Song
+            WHERE song_id = %s;
+        """, (song_id,))
+
+        #set song equal to the array with the single row cursor returns of the match 
+        song = cursor.fetchone()
+
+        if song is None:
+            raise HTTPException(status_code=404, detail="Song not found")
+        
+        #paste the first row into the get_song_url func defined in database.py
+        #and store the result, which is the url taken from Supabase storage
+        signed_url = get_song_url(song[0])
+
+        #return a dictionary with the signed url of the audio file
+        return {"audio_url": signed_url}
+
+    finally:
+        cursor.close()
+        conn.close()

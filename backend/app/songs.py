@@ -118,12 +118,21 @@ def get_songs_with_artists():
 
     try:
         cursor.execute("""
-            SELECT S.song_id, S.song_name, S.storage_path, S.duration, 
-            STRING_AGG(A.artist_name, ', ') AS artist_names
-            FROM Song S
-            JOIN Song_Artist SA ON S.song_id = SA.song_id JOIN Artist A ON SA.artist_id = A.artist_id
-            GROUP BY S.song_id, S.song_name, S.storage_path, S.duration, A.artist_id
-            ORDER BY A.artist_id;
+            SELECT S.song_id, S.song_name, S.storage_path, S.duration,
+            COALESCE(
+                AL.image_url,
+                (ARRAY_AGG(A.image_url ORDER BY A.artist_name))[1]
+            ) AS image_url,
+            STRING_AGG(A.artist_name, ', ') AS artist_name
+                       
+            FROM Song S LEFT JOIN Album AL ON S.album_id = AL.album_id
+            JOIN Song_Artist SA ON S.song_id = SA.song_id
+            JOIN Artist A ON SA.artist_id = A.artist_id
+                       
+            GROUP BY S.song_id, S.song_name, S.storage_path, 
+                S.duration, AL.image_url, A.artist_name
+                       
+            ORDER BY A.artist_name;
         """)
 
         #set songsTuples equal to the array with the rows cursor returns of the match 
@@ -141,7 +150,8 @@ def get_songs_with_artists():
                 "song_name": row[1], 
                 "storage_path": row[2], 
                 "duration": row[3],
-                "artist_name": row[4]
+                "image_url": row[4],
+                "artist_name": row[5]
                 }
             )
         

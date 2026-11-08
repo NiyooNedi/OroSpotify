@@ -122,8 +122,8 @@ def get_songs_with_artists():
             STRING_AGG(A.artist_name, ', ') AS artist_names
             FROM Song S
             JOIN Song_Artist SA ON S.song_id = SA.song_id JOIN Artist A ON SA.artist_id = A.artist_id
-            GROUP BY S.song_id, S.song_name, S.storage_path, S.duration
-            ORDER BY S.song_id;
+            GROUP BY S.song_id, S.song_name, S.storage_path, S.duration, A.artist_id
+            ORDER BY A.artist_id;
         """)
 
         #set songsTuples equal to the array with the rows cursor returns of the match 

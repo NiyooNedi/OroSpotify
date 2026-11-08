@@ -122,8 +122,78 @@ function App() {
           </div>
         </header>
 
+        {/* welcome section */}
+        <section className="hero">
+          <div className="hero-content">
+            <p className="hero-label">WELCOME TO OROSPOTIFY</p>
+
+            <h2>
+              The sounds of
+              <br />
+              <span>our people.</span>
+            </h2>
+
+            <p className="hero-description">
+              Explore Oromo music, discover artists, and celebrate
+              the sounds that bring us together.
+            </p>
+
+            <a href="#song-library" className="hero-button">
+              Explore music <span>→</span>
+            </a>
+          </div>
+
+          <div className="hero-art">
+            <div className="art-circle circle-one"></div>
+            <div className="art-circle circle-two"></div>
+
+            <div className="art-center">
+              <span>OROMO</span>
+              <span className="art-note">♫</span>
+            </div>
+
+            <span className="art-decoration decoration-one">✳</span>
+            <span className="art-decoration decoration-two">✦</span>
+          </div>
+        </section>
+
+        {/* song library */}
+        <section className="library-section" id="song-library">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">EXPLORE YOUR COLLECTION</p>
+              <h2>Song Library</h2>
+            </div>
+
+            <span className="song-count">
+              {songs.length} {songs.length === 1 ? "SONG" : "SONGS"}
+            </span>
+          </div>
+
+          {/* search bar */}
+          <div className="search-container">
+            <span className="search-icon">⌕</span>
+
+            <input
+              id="song-search"
+              type="text"
+              placeholder="Search for a song..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+
+            {search && (
+              <button
+                className="clear-search"
+                onClick={() => setSearch("")}
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+        </section>  
       </main>
-      
     </div>
   );
 }

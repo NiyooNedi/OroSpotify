@@ -54,6 +54,78 @@ function App() {
     fetchSongs();
   }, []);
 
+  //filter the songs based on what the user types in search bar
+  const filteredSongs = songs.filter((song) =>
+    (song.song_name || "").toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="app">
+      {/* sidebar */}
+      <aside className="sidebar">
+        <div className="logo">
+          <span className="logo-symbol">🌳</span>
+          <span>OroSpotify</span>
+        </div>
+
+        <nav className="navigation">
+          <p className="nav-heading">MENU</p>
+
+          <button className="nav-item active">
+            <span>⌂</span>
+            Home
+          </button>
+
+          <button
+            className="nav-item"
+            onClick={() =>
+              document.getElementById("song-search")?.focus()
+            }
+          >
+            <span>⌕</span>
+            Search
+          </button>
+
+          <button
+            className="nav-item"
+            onClick={() =>
+              document.getElementById("song-library")?.scrollIntoView({
+                behavior: "smooth",
+              })
+            }
+          >
+            <span>♫</span>
+            Your Library
+          </button>
+        </nav>
+
+        <div className="sidebar-bottom">
+          <div className="sidebar-decoration">✳</div>
+          <p>Music connects us.</p>
+          <span>Celebrating Oromo sounds.</span>
+        </div>
+      </aside>
+
+      {/* main content area */}
+      <main className="main-content">
+        <header className="topbar">
+          <div>
+            <p className="eyebrow">YOUR MUSIC, YOUR CULTURE</p>
+            <h1>Discover Oromo Music</h1>
+          </div>
+
+          <div className="topbar-mark">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flag_of_the_Oromia_Region.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
+              alt="Oromo flag"
+            />
+          </div>
+        </header>
+
+      </main>
+      
+    </div>
+  );
 }
 
 export default App;

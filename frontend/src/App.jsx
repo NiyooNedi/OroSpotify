@@ -192,8 +192,77 @@ function App() {
             )}
           </div>
 
-        </section>  
+          {/* the loading state */}
+          {loading && (
+            <div className="message">Loading your music...</div>
+          )}
+
+          {/* error state */}
+          {!loading && error && (
+            <div className="message error-message">{error}</div>
+          )}
+
+          {/* empty state */}
+          {!loading && !error && filteredSongs.length === 0 && (
+            <div className="message">
+              {search
+                ? "No songs match your search."
+                : "Your music library is empty."}
+            </div>
+          )}
+
+          {/* displaying all songs */}
+          {!loading && !error && filteredSongs.length > 0 && (
+            <div className="song-list">
+              <div className="song-list-header">
+                <span>#</span>
+                <span>SONG TITLE</span>
+                <span>ARTIST</span>
+                <span>DURATION</span>
+              </div>
+
+              {filteredSongs.map((song, index) => (
+                <button
+                  className={`song-row ${
+                    selectedSong?.song_id === song.song_id
+                      ? "selected"
+                      : ""
+                  }`}
+                  key={song.song_id}
+                  onClick={() => setSelectedSong(song)}
+                >
+                  <span className="song-number">
+                    {selectedSong?.song_id === song.song_id
+                      ? "♫"
+                      : index + 1}
+                  </span>
+
+                  <span className="song-title">
+                    <span className="song-artwork">♫</span>
+                    <span>{song.song_name}</span>
+                  </span>
+
+                  <span className="song-artist">
+                    <span>{song.artist_name}</span>
+                  </span>
+
+                  <span className="song-duration">
+                    {formatDuration(song.duration)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
       </main>
+
+      {/* Music player */}
+      <footer className="player-bar">
+        <MusicPlayer
+          song={selectedSong}
+          apiUrl={API_URL}
+        />
+      </footer>
     </div>
   );
 }

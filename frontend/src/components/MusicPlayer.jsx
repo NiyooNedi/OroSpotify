@@ -65,10 +65,13 @@ function MusicPlayer({ song, apiUrl }) {
         <>
             {/* song info */}
             <div className="player-song">
-                <img className="song-artwork"
-                    src={song.image_url} 
-                    alt={song.song_name}
-                />
+                {song ? (
+                    <img className="song-artwork"
+                    src={song.image_url} alt={song.song_name}/>
+                    ) : (
+                        <div className="song-artwork">♫</div>
+                    )
+                }
                 <div>
                     <p>{song ? song.song_name : "Choose a song"}</p>
 

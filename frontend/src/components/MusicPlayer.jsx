@@ -61,6 +61,56 @@ function MusicPlayer({ song, apiUrl }) {
         };
     }, [song, apiUrl]);
 
+    return (
+        <>
+            {/* song info */}
+            <div className="player-song">
+                <img className="song-artwork"
+                    src={song.image_url} 
+                    alt={song.song_name}
+                />
+                <div>
+                    <p>{song ? song.song_name : "Choose a song"}</p>
+
+                    <span>
+                        {song ? song.artist_name : "Your music starts here"}
+                    </span>
+                </div>
+            </div>
+
+            {/* audio controls */}
+            <div className="player-controls">
+                {!song && <span>Select a song to start listening.</span>}
+
+                {loading && <span>Loading audio...</span>}
+
+                {error && <span className="error-message">{error}</span>}
+
+                {audioUrl && (
+                    <audio
+                        key={song.song_id}
+                        src={audioUrl}
+                        controls
+                        preload="metadata"
+                    >
+                        Your browser does not support audio playback.
+                    </audio>
+                )}
+            </div>
+
+            {/* music player's status */}
+            <div className="player-status">
+                <span className="status-dot"></span>
+                {loading
+                    ? "Connecting..."
+                    : audioUrl
+                    ? "Ready to play"
+                    : song
+                    ? "Preparing audio"
+                    : "Library connected"}
+            </div>
+        </>
+    );
 }
 
 export default MusicPlayer;

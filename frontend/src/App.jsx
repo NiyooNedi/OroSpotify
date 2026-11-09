@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import "./App.css";
 import MusicPlayer from "./components/MusicPlayer";
@@ -238,7 +237,9 @@ function App() {
                   </span>
 
                   <span className="song-title">
-                    <span className="song-artwork">♫</span>
+                    <img className="song-artwork"
+                      src={song.image_url} alt={song.song_name}
+                    />
                     <span>{song.song_name}</span>
                   </span>
 
